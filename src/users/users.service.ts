@@ -8,44 +8,49 @@ import { User } from './user.entity';
 export class UsersService {
   private readonly users: User[];
 
-  constructor() // @InjectRepository(User) private usersRepository: Repository<User>,
-  {
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+  ) {
     this.users = [
       {
         id: 1,
         username: 'john',
         password: 'changeme',
-        age: 21,
       },
       {
         id: 2,
         username: 'chris',
         password: 'secret',
       },
+      {
+        id: 3,
+        username: 'maria',
+        password: 'guess',
+      },
     ];
   }
 
-  // findAll(): Promise<User[]> {
-  //   return this.usersRepository.find();
-  // }
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
 
-  // findOne(id: number): Promise<User> {
-  //   return this.usersRepository.findOne(id);
-  // }
+  findOne(id: number): Promise<User> {
+    return this.usersRepository.findOne(id);
+  }
 
-  async findOne(username: string): Promise<User | undefined> {
+  async findOneByUsername(username: string): Promise<User | undefined> {
     return this.users.find(user => user.username === username);
   }
 
-  // create(User: User): Promise<User> {
-  //   return this.usersRepository.save(User);
-  // }
+  create(user: User): Promise<User> {
+    return this.usersRepository.save(user);
+  }
 
-  // update(id: number, UserData: User): Promise<any> {
-  //   return this.usersRepository.update(id, UserData);
-  // }
+  update(id: number, usersData: User): Promise<any> {
+    return this.usersRepository.update(id, usersData);
+  }
 
-  // async remove(id: number): Promise<void> {
-  //   await this.usersRepository.delete(id);
-  // }
+  async remove(id: number): Promise<void> {
+    await this.usersRepository.delete(id);
+  }
 }

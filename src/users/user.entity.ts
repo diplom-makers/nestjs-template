@@ -1,5 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-// import { Station } from '../station/station.entity';
+import { ManyToOne, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -7,16 +6,10 @@ export class User {
   id: number;
 
   @Column()
-  name?: string;
-
-  @Column()
   username: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
-
-  @Column()
-  age?: number;
 
   // @OneToMany(
   //   type => Station,
