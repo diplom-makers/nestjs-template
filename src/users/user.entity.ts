@@ -7,10 +7,16 @@ export class User {
   id: number;
 
   @Column()
-  name: string;
+  name?: string;
 
   @Column()
-  age: number;
+  username: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  age?: number;
 
   // @OneToMany(
   //   type => Station,
