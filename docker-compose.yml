@@ -12,7 +12,7 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
-    command: npm run start:dev
+    command: ./start-file
     env_file:
       - .env
     networks:
@@ -20,11 +20,13 @@ services:
     depends_on:
       # - redis
       - postgres
+
   # redis:
   #   container_name: redis
   #   image: redis:5
   #   networks:
   #     - webnet
+
   postgres:
     container_name: bookstore_db
     image: postgres:12
@@ -38,6 +40,11 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    # healthcheck:
+    #   start_period: 40sx
+
+
+
 networks:
   webnet:
 volumes:

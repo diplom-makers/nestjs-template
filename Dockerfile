@@ -4,13 +4,15 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=development
+RUN yarn install --only=development
 
 COPY . .
 
-RUN npm run build
+RUN yarn run build
 
-# RUN npm run migration:generate
+# RUN yarn run migration:generate
+
+# RUN yarn run migration:run
 
 FROM node:12.13-alpine as production
 
@@ -21,7 +23,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN yarn install --only=production
 
 COPY . .
 

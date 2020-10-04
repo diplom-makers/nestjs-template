@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { reject } from 'ramda';
+
+import { isNotDefined } from 'utils/ramda';
 
 import { User } from './user.entity';
 
@@ -10,40 +13,39 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-  ) {
-    this.users = [
-      {
-        id: 1,
-        username: 'john',
-        password: 'changeme',
-      },
-      {
-        id: 2,
-        username: 'chris',
-        password: 'secret',
-      },
-      {
-        id: 3,
-        username: 'maria',
-        password: 'guess',
-      },
-    ];
-  }
+  ) {}
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersRepository.findOne(id);
+  findOne(crdnls): Promise<User> {
+    return this.usersRepository.findOneOrFail(reject(isNotDefined, crdnls));
   }
 
-  async findOneByUsername(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+  findOneByUsername(username: string): Promise<User> {
+    return this.usersRepository.findOne({ username });
   }
+
+  findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+    });
+    // .createQueryBuilder('user')
+    // .where('username = :username OR email = :email', {
+    //   username: usernameOrEmail,
+    //   email: usernameOrEmail,
+    // })
+    // .getOne();
+  }
+
+  // async findOneByUsername(username: string): Promise<User | undefined> {
+  //   return this.users.find(user => user.username === username);
+  // }
 
   create(user: User): Promise<User> {
-    return this.usersRepository.save(user);
+    const userInstance = this.usersRepository.create(user);
+    return this.usersRepository.save(userInstance);
   }
 
   update(id: number, usersData: User): Promise<any> {
