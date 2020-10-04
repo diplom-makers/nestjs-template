@@ -12,12 +12,18 @@ import { JwtStrategy } from './jwt-auth.strategy';
 
 @Module({
   imports: [
-    PassportModule,
+    UsersModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: {
+        expiresIn: '1d',
+        algorithm: 'HS384',
+      },
+      verifyOptions: {
+        algorithms: ['HS384'],
+      },
     }),
-    UsersModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

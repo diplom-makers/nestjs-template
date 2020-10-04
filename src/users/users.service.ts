@@ -27,6 +27,10 @@ export class UsersService {
     return this.usersRepository.findOne({ username });
   }
 
+  findOneByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({ email });
+  }
+
   findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
     return this.usersRepository.findOne({
       where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
@@ -38,10 +42,6 @@ export class UsersService {
     // })
     // .getOne();
   }
-
-  // async findOneByUsername(username: string): Promise<User | undefined> {
-  //   return this.users.find(user => user.username === username);
-  // }
 
   create(user: User): Promise<User> {
     const userInstance = this.usersRepository.create(user);
